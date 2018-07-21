@@ -6,6 +6,7 @@ import Login from '@/views/Login'
 import Register from '@/views/Register'
 import Usercenter from '@/views/Usercenter'
 import Cart from '@/views/Cart'
+import Product from '@/views/Product'
 
 Vue.use(Router)
 
@@ -41,6 +42,11 @@ const router = new Router({
       path: '/cart',
       name: 'cart',
       component: Cart
+    },
+    {
+      path: '/product',
+      name: 'product',
+      component: Product
     },
   ]
 })
