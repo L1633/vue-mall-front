@@ -22,6 +22,8 @@
     }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+    .shop-cart{
+        width: 100%;
+    }
 </style>
