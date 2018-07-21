@@ -5,6 +5,7 @@ import Layout from '@/views/Layout'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
 import Usercenter from '@/views/Usercenter'
+import Cart from '@/views/Cart'
 
 Vue.use(Router)
 
@@ -35,6 +36,11 @@ const router = new Router({
       name: 'usercenter',
       component: Usercenter,
       meta: { requireAuth: true }
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: Cart
     },
   ]
 })
