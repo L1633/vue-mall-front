@@ -16,11 +16,11 @@
                     <el-table-column label="日期" width="120">
                         <template slot-scope="scope">{{ scope.row.date }}</template>
                     </el-table-column>
-                    <el-table-column prop="name" label="商品" width="120"></el-table-column>
-                    <el-table-column prop="address" label="单价(元)"></el-table-column>
-                    <el-table-column prop="count" label="数量"></el-table-column>
-                    <el-table-column prop="name" label="小计" ></el-table-column>
-                    <el-table-column prop="name" label="操作" width="50" show-overflow-tooltip>
+                    <el-table-column prop="good" label="商品" ></el-table-column>
+                    <el-table-column prop="price" label="单价(元)" width="120"></el-table-column>
+                    <el-table-column prop="count" label="数量"  width="100">111111</el-table-column>
+                    <el-table-column prop="total" label="小计"  width="200"></el-table-column>
+                    <el-table-column prop="action" label="操作" width="50" show-overflow-tooltip>
                          <template slot-scope="scope">
                             <el-button @click.native.prevent="deleteRow(scope.$index, tableData)" type="text" size="small">
                                 移除
@@ -52,30 +52,30 @@
             return {
                 tableData: [{
                     date: '2016-05-04',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
+                    good: '小米8',
+                    price: 2699,
+                    count: 2,
+                    total: '',
                     }, {
                     date: '2016-05-01',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
+                    good: '魅族16',
+                    price: 2698,
+                    count: 1,
+                    total: '',
                     }, {
                     date: '2016-05-08',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
+                    good: '小推车',
+                    price: 1,
+                    count: 22,
+                    total: '',
                     },]
             }
         },
         components:{
             ShopFooter
+        },
+        computed:{
+           
         },
         methods: {
             deleteRow(index, rows) {

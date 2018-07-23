@@ -51,7 +51,8 @@
             }
         },
         created(){
-            this.getGt()
+            this.getGt();
+            // this.nodeGt();
         },
         methods:{
             // 获取极验数据
@@ -85,6 +86,36 @@
                 .catch( (error)=> {
                     console.log(error);
                 });
+            },
+            nodeGt(){
+                var _this = this;
+                this.axios.get('/auth/gt?t='+ (new Date()).getTime())
+                .then(response =>{
+                    this.geetest_status = response.data.status;
+                    initGeetest({
+                        gt: response.data.gt,
+                        challenge: response.data.challenge,
+                        offline: !response.data.success, // 表示用户后台检测极验服务器是否宕机，与SDK配合，用户一般不需要关注
+                        new_captcha: response.data.new_captcha, // 用于宕机时表示是新验证码的宕机
+                        product: "float", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                        width: "290px"
+                    }, (captchaObj)=> {
+                        captchaObj.appendTo("#captchaBox"); //将验证按钮插入到宿主页面中captchaBox元素内
+                        captchaObj.onSuccess(()=>{
+                            //your code
+                            var result = captchaObj.getValidate();
+                            console.log(result,'滑动成功后给的参数');
+                            var { geetest_challenge,geetest_seccode,geetest_validate } = result;
+                            _this.gtParams = { geetest_challenge, geetest_seccode, geetest_validate };
+                        }).onError(()=>{
+                            //your code
+                        })
+                    });
+
+                })
+                .catch(err=>{
+
+                })
             },
             // 提交表单
             submitForm(form){
