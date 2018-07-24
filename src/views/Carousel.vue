@@ -49,8 +49,8 @@
         },
         methods: {
             getList() {
-                this.axios.get('/productClassify').
-                then(res=>{
+                this.axios.get('/productClassify')
+                .then(res=>{
                     console.log(res,'商品列表')
                     this.goodsList = res.data.list;
                 }).catch(error=>{

@@ -19,7 +19,7 @@ Vue.prototype.axios = axios;
 
 axios.defaults.baseURL = 'http://192.168.1.120/api/'; //指定全局访问url   php服务器
 
-// axios.defaults.baseURL = 'http://192.168.1.107:3000/'; //指定全局访问url node服务器
+// axios.defaults.baseURL = 'http://192.168.1.102:3000/'; //指定全局访问url node服务器
 
 // 设置头
 axios.defaults.headers.common['Authorization'] = store.state.token;
