@@ -164,7 +164,6 @@
                 }else{
                   item.checked = item.checked=="1"?'0':'1';
                 }
-
                 // this.axios.post("/users/cartEdit",{
                 //   productId:item.productId,
                 //   productNum:item.productNum,

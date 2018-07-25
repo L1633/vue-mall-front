@@ -14,7 +14,7 @@ Vue.use(Router)
 
 // 页面刷新时，重新赋值token
 if (sessionStorage.getItem('token')) {
-  store.commit('set_token', sessionStorage.getItem('token'))
+    store.commit('set_token', sessionStorage.getItem('token'));
 }
 
 const router = new Router({
