@@ -68,7 +68,7 @@
            
            <el-dropdown>
                 <span class="el-dropdown-link">
-                    <i class="el-icon-info el-icon--right"></i>
+                    <i class="el-icon-goods el-icon--right"></i>
                 </span>
 
                 <el-dropdown-menu slot="dropdown" v-if="!$store.state.token">
@@ -80,6 +80,10 @@
                 <el-dropdown-menu slot="dropdown" v-if="$store.state.token">
                     <el-dropdown-item>
                         <p>一大堆垃圾</p>
+                        
+                    </el-dropdown-item>
+                    <el-dropdown-item>
+                        <router-link to="/cart">前往购物车</router-link>
                     </el-dropdown-item>
                 </el-dropdown-menu>
 

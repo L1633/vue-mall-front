@@ -19,7 +19,6 @@
                     <div style="padding: 14px;">
                         <span>信息</span>
                         <div class="bottom clearfix">
-                        <!-- <time class="time">{{ currentDate }}</time> -->
                         <el-button type="text" class="button">操作按钮</el-button>
                         </div>
                     </div>
@@ -38,7 +37,9 @@
             <div slot="title" class="fl">数码配件</div>
             <div slot="product-card">
                 <el-card :body-style="{ padding: '10px' }" v-for="(item,index) in 10" :key="index" class="product-card-item fl" shadow="hover">
-                    <img src="../../static/images/card4.jpg" class="image">
+                    <div class="card-img">
+                        <img src="../../static/images/card4.jpg" class="image">
+                    </div>
                     <div style="padding: 14px;">
                         <span>信息</span>
                         <div class="bottom clearfix">
@@ -61,7 +62,9 @@
             <div slot="title" class="fl">周边生活</div>
             <div slot="product-card">
                 <el-card :body-style="{ padding: '10px' }" v-for="(item,index) in 10" :key="index" class="product-card-item fl" shadow="hover">
-                    <img src="../../static/images/card3.jpg" class="image">
+                    <div class="card-img">
+                        <img src="../../static/images/card3.jpg" class="image">
+                    </div>
                     <div style="padding: 14px;">
                         <span>信息</span>
                         <div class="bottom clearfix">
@@ -140,10 +143,16 @@
         height: 300px;
         width: 236px;
         margin: 0 0 14px 15px;
-        .image {
-            width: 100%;
-            display: block;
+        .card-img{
+            width: 180px;
+            height: 180px;
+            margin:36px auto 0;
+            .image {
+                width: 100%;
+                display: block;
+            }
         }
+        
     }
     .product-card-item:nth-child(1){
         margin-left: 0;

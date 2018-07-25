@@ -10,7 +10,7 @@
             
             <swiper :options="swiperOption" ref="mySwiper">
                 <!-- slides -->
-                <swiper-slide v-for="good in hotGoods" :key="good.id">
+                <swiper-slide v-for="good in hotGoods" :key="good.id" @click.native="goodDetail(good.id)">
                     <el-card :body-style="{ padding: '0 10px' }"  shadow="never">
                         <div class="swiper-img">
                             <img :src="good.image" class="image">
@@ -81,6 +81,9 @@
                 .catch(error=>{
 
                 })
+            },
+            goodDetail(id){
+                this.$router.push('/products/'+ id );
             }
         }
 

@@ -5,6 +5,8 @@ import Layout from '@/views/Layout'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
 import Usercenter from '@/views/Usercenter'
+import UserInfo from '@/views/UserInfo'
+import Favorite from '@/views/Favorite'
 import Cart from '@/views/Cart'
 import Product from '@/views/Product'
 
@@ -36,7 +38,17 @@ const router = new Router({
       path: '/usercenter',
       name: 'usercenter',
       component: Usercenter,
-      meta: { requireAuth: true }
+      meta: { requireAuth: true },
+      children:[
+        {
+          path: '',
+          component: UserInfo,
+        },
+        {
+          path: 'favorite',
+          component: Favorite,
+        },
+      ]
     },
     {
       path: '/cart',
@@ -44,10 +56,12 @@ const router = new Router({
       component: Cart
     },
     {
-      path: '/product',
+      path: '/products/:id',
       name: 'product',
+      props:true,
       component: Product
     },
+    
   ]
 })
 

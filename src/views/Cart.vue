@@ -1,11 +1,12 @@
 <template>
     <div class="shop-cart">
+
         <div class="my-cart">
             <div class="logo"></div>
-            <div class="title">我的购物车</div>
+            <div class="title fl">我的购物车</div>
             <span>温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</span>
-            <a href="">登录</a>
-            <a href="">注册</a>
+            <a href="#/login">登录</a>
+            <a href="#/register">注册</a>
         </div>
 
         <div class="cart-main">
@@ -22,7 +23,7 @@
                             </ul>
                         </div>
                         <ul class="cart-item-list">
-                            <li v-for="item in cartList" :key="item.productName">
+                            <li v-for="(item,index) in cartList" :key="item.productName">
                                 <div class="cart-tab-1">
                                     <div class="cart-item-check">
                                         <a href="javascipt:;" class="checkbox-btn item-check-btn" :class="{'check':item.checked=='1'}" @click="editCart('checked',item)">
@@ -33,34 +34,35 @@
                                     </div>
                                     <div class="cart-item-pic">
                                         <!-- <img v-lazy="'/static/'+item.productImage" v-bind:alt="item.productName"> -->
+                                        <img :src="item.productSku.product.image" alt="">
                                     </div>
                                     <div class="cart-item-title">
-                                        <div class="item-name">{{item.productName}}</div>
+                                        <div class="item-name">{{item.productSku.product.title}}</div>
                                     </div>
                                 </div>
                                 <div class="cart-tab-2">
-                                    <div class="item-price">{{item.salePrice|currency('$')}}</div>
+                                    <!-- <div class="item-price">{{item.salePrice|currency('$')}}</div> -->
+                                    <div class="item-price">{{item.productSku.product.price}}</div>
                                 </div>
                                 <div class="cart-tab-3">
                                     <div class="item-quantity">
                                         <div class="select-self select-self-open">
                                             <div class="select-self-area">
                                                 <a class="input-sub" @click="editCart('minu',item)">-</a>
-                                                <span class="select-ipt">{{item.productNum}}</span>
+                                                <span class="select-ipt">{{item.amount}}</span>
                                                 <a class="input-add" @click="editCart('add',item)">+</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="cart-tab-4">
-                                    <div class="item-price-total">{{(item.productNum*item.salePrice)|currency('$')}}</div>
+                                    <!-- <div class="item-price-total">{{(item.productNum*item.salePrice)|currency('$')}}</div> -->
+                                    <div class="item-price-total">{{item.amount*item.productSku.product.price}}</div>
                                 </div>
                                 <div class="cart-tab-5">
                                     <div class="cart-item-opration">
-                                        <a href="javascript:;" class="item-edit-btn" @click="delCartConfirm(item)">
-                                            <svg class="icon icon-del">
-                                                <use xlink:href="#icon-del"></use>
-                                            </svg>
+                                        <a href="javascript:;" class="item-edit-btn" @click="delCartConfirm(item.product_sku_id,index)">
+                                            <i class="el-icon-delete"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -82,7 +84,7 @@
                         </div>
                         <div class="cart-foot-r">
                             <div class="item-total">
-                                Item total: <span class="total-price">{{totalPrice|currency('$')}}</span>
+                                <!-- Item total: <span class="total-price">{{totalPrice|currency('$')}}</span> -->
                             </div>
                             <div class="btn-wrap">
                                 <a class="btn btn--red" v-bind:class="{'btn--dis':checkedCount==0}" @click="checkOut">Checkout</a>
@@ -103,12 +105,15 @@
     export default {
         data() {
             return {
-                cartList:[{"productImage":"1.jpg","salePrice":"129","productName":"小钢炮蓝牙音箱","productId":"201710017","_id":{"$oid":"58e7058498dab115d336b3fc"},"productNum":"6","checked":"0"}]
-
+                // cartList:[{"productImage":"1.jpg","salePrice":"129","productName":"小钢炮蓝牙音箱","productId":"201710017","_id":{"$oid":"58e7058498dab115d336b3fc"},"productNum":"5","checked":"0"}]
+                cartList:[],
             }
         },
         components:{
             ShopFooter
+        },
+        created(){
+          this.init();
         },
         computed:{
             checkAllFlag(){
@@ -125,36 +130,97 @@
             var money = 0;
             this.cartList.forEach((item)=>{
               if(item.checked=='1'){
-                money += parseFloat(item.salePrice)*parseInt(item.productNum);
+                money += parseFloat(item.productSku.product.price)*parseInt(iitem.amount);
               }
             })
             return money;
           }
         },
         methods: {
+            init(){
+              this.axios.get('/cart')
+              .then(res=>{
+                console.log(res,'购物车')
+                this.cartList = res.data.list;
+              })
+              .catch(err=>{
+
+              })
+            },
             deleteRow(index, rows) {
                 rows.splice(index, 1);
             },
             toggleSelection(){
 
             },
-            editCart(){
+            editCart(flag,item){
+              if(flag=='add'){
+                  item.amount++;
+                }else if(flag =='minu'){
+                  if(item.amount<=1){
+                    return;
+                  }
+                  item.amount--;
+                }else{
+                  item.checked = item.checked=="1"?'0':'1';
+                }
 
+                // this.axios.post("/users/cartEdit",{
+                //   productId:item.productId,
+                //   productNum:item.productNum,
+                //   checked:item.checked
+                // }).then((response)=>{
+                //     let res = response.data;
+                //     if(res.status=="0"){
+                //       this.$store.commit("updateCartCount",flag=="add"?1:-1);
+                //     }
+                // })
             },
             toggleCheckAll(){
                 var flag = !this.checkAllFlag;
                 this.cartList.forEach((item)=>{
                   item.checked = flag?'1':'0';
                 })
-                this.axios.post("/users/editCheckAll",{
-                  checkAll:flag
-                }).then((response)=>{
-                    let res = response.data;
-                    if(res.status=='0'){
-                        console.log("update suc");
-                    }
-                })
+                // this.axios.post("/users/editCheckAll",{
+                //   checkAll:flag
+                // }).then((response)=>{
+                //     let res = response.data;
+                //     if(res.status=='0'){
+                //         console.log("update suc");
+                //     }
+                // })
             },
+            checkOut(){
+
+            },
+            delCartConfirm(id,index){
+                this.$confirm('您确定要删除该商品吗？', '提示', {
+                  confirmButtonText: '删除',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                  this.axios.delete(`/cart/${id}`)
+                .then(res=>{
+                    console.log(res);
+                    if(res.data.status_code == 0){
+                        this.cartList.splice(index,1);
+                        this.$message({
+                            message: "删除成功",
+                            type: 'success'
+                        });
+                    }
+                  })
+                  .catch(err=>{
+                    console.log(err)
+                  })
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                  });          
+                });
+                
+            }
         },
     }
 </script>
@@ -165,11 +231,14 @@
         .my-cart{
             width: 1240px;
             height: 80px;
+            line-height: 80px;
             margin:0 auto;
+            border-bottom: 1px solid #f8fcff;
         }
         .cart-main{
             width: 1240px;
             margin:0 auto;
+            background-color: #f8fcff;
         }
     }
 
@@ -447,3 +516,4 @@
   fill: #999;
 }
 </style>
+

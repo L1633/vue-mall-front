@@ -17,7 +17,7 @@
                     <dd>我的回购单</dd>
                     <dt>个人中心</dt>
                     <dd>地址管理</dd>
-                    <dd>我的收藏</dd>
+                    <dd><router-link to="/usercenter/favorite">我的收藏</router-link></dd>
                     <dd>消息提醒</dd>
                     <dd>建议反馈</dd>
                     <dt>资产中心</dt>
@@ -33,37 +33,10 @@
             </div>
 
             <div class="center-right fr">
-                <div class="center-right-top">
-
-                    <div class="user-card fl">
-                        <div class="pic fl">
-                            <img src="../../static/images/photo1.jpg" alt="">
-                        </div>
-                        <div class="name fl">
-                            <span > {{info.name}} </span>
-                            <p class="small">欢迎您回来！</p>
-                        </div>
-                    </div>
-                    
-                    <div class="user-info fl">
-                        <ul>
-                            <li class="notice-color">商城账号：<span ></span></li>
-                            <li class="notice-color">绑定邮箱：<span >{{info.email}}</span></li>
-                            <li class="notice-color">修改个人信息<span ></span></li>
-                        </ul>
-                    </div>
-
-                </div>
-
-                <div class="center-right-bottom">
-
-
-                </div>
-
+                <router-view/>
             </div>
             
         </div>
-
 
          <shop-footer></shop-footer>
     </div>
@@ -76,26 +49,18 @@
     export default {
         data() {
             return {
-                info:{ },
+
             }
         },
         created(){
-            this.userInfo();
+      
         },
         components:{
             ShopHeader,
             ShopFooter
         },
         methods: {
-            userInfo() {
-                this.axios.get("/auth/user")
-                .then( (response)=> {
-                    this.info = response.data.data;
-                })
-                .catch( (error)=> {
-                    console.log(error);
-                });
-            }
+           
         },
     }
 </script>
