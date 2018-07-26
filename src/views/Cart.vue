@@ -87,7 +87,7 @@
                                 <!-- Item total: <span class="total-price">{{totalPrice|currency('$')}}</span> -->
                             </div>
                             <div class="btn-wrap">
-                                <a class="btn btn--red" v-bind:class="{'btn--dis':checkedCount==0}" @click="checkOut">Checkout</a>
+                                <a class="btn btn--red" v-bind:class="{'btn--dis':checkedCount==0}" @click="checkOut">去结算</a>
                             </div>
                         </div>
                     </div>
@@ -116,7 +116,7 @@
           this.init();
         },
         computed:{
-            checkAllFlag(){
+          checkAllFlag(){
             return this.checkedCount == this.cartList.length;
           },
           checkedCount(){
@@ -174,6 +174,16 @@
                 //       this.$store.commit("updateCartCount",flag=="add"?1:-1);
                 //     }
                 // })
+                 this.axios.put(`/cart/${item.id}`,{
+                  id:item.id,
+                  amount:item.amount
+                }).then((res)=>{
+                    console.log(res,'加减的反馈')
+                    // let res = response.data;
+                    // if(res.status=="0"){
+                    //   this.$store.commit("updateCartCount",flag=="add"?1:-1);
+                    // }
+                })
             },
             toggleCheckAll(){
                 var flag = !this.checkAllFlag;
@@ -189,8 +199,9 @@
                 //     }
                 // })
             },
+            // 结算    去创建订单
             checkOut(){
-
+                this.$router.push('/checkout');
             },
             delCartConfirm(id,index){
                 this.$confirm('您确定要删除该商品吗？', '提示', {

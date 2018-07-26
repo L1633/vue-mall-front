@@ -8,6 +8,7 @@ import Usercenter from '@/views/Usercenter'
 import UserInfo from '@/views/UserInfo'
 import Favorite from '@/views/Favorite'
 import Cart from '@/views/Cart'
+import CheckOut from '@/views/CheckOut'
 import Product from '@/views/Product'
 
 Vue.use(Router)
@@ -53,7 +54,7 @@ const router = new Router({
     {
       path: '/cart',
       name: 'cart',
-      component: Cart
+      component: Cart,
     },
     {
       path: '/products/:id',
@@ -61,7 +62,12 @@ const router = new Router({
       props:true,
       component: Product
     },
-    
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: CheckOut,
+      meta: { requireAuth: true },
+    },
   ]
 })
 

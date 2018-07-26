@@ -392,7 +392,6 @@
                     amount:1
                 })
                 .then(res=>{
-                    console.log(res);
                     if(res.data.status_code == 0){
                         this.$message({
                             message: '加入购物车成功',
@@ -402,6 +401,12 @@
                 })
                 .catch(err=>{
                     console.log(err)
+                    if(err.status == 400){
+                        this.$message({
+                            message: '请先登录',
+                            type: 'warning'
+                            });
+                    }
                 })
             }
         },
