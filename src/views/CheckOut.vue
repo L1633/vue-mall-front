@@ -13,6 +13,64 @@
 
         <div class="goodInfo">
             <div class="title">确认订单信息信息</div>
+             <div class="cart-item-head">
+                <ul>
+                    
+                    <li>商品名称</li>
+                    <li>单价</li>
+                    <li>数量</li>
+                    <li>小计</li>
+                    <li>配送方式</li>
+                </ul>
+            </div>
+
+            <ul class="cart-item-list">
+                    <li v-for="(item,index) in orderInfo" :key="item.id">
+                        <div class="cart-tab-1">
+                            <div class="cart-item-check">
+                                <a href="javascipt:;" class="checkbox-btn item-check-btn" v-bind:class="{'check':item.checked=='1'}" @click="editCart('checked',item,index)">
+                                <svg class="icon icon-ok">
+                                    <use xlink:href="#icon-ok"></use>
+                                </svg>
+                                </a>
+                            </div>
+                            <div class="cart-item-pic">
+                                <!-- <img v-lazy="'/static/'+item.productImage" v-bind:alt="item.productName"> -->
+                                <img :src="item.productSku.product.image" alt="">
+                            </div>
+                            <div class="cart-item-title">
+                                <div class="item-name">{{item.productSku.product.title}}</div>
+                            </div>
+                        </div>
+                        <div class="cart-tab-2">
+                            <!-- <div class="item-price">{{item.salePrice|currency('$')}}</div> -->
+                            <div class="item-price">{{item.productSku.product.price}}</div>
+                        </div>
+                        <div class="cart-tab-3">
+                            <div class="item-quantity">
+                                <div class="select-self select-self-open">
+                                    <div class="select-self-area">
+                                        <a class="input-sub" @click="editCart('minu',item)">-</a>
+                                        <span class="select-ipt">{{item.amount}}</span>
+                                        <a class="input-add" @click="editCart('add',item)">+</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cart-tab-4">
+                            <!-- <div class="item-price-total">{{(item.productNum*item.salePrice)|currency('$')}}</div> -->
+                            <div class="item-price-total">{{item.amount*item.productSku.product.price}}</div>
+                        </div>
+                        <div class="cart-tab-5">
+                            <div class="cart-item-opration">
+                                <a href="javascript:;" class="item-edit-btn" @click="delCartConfirm(item.product_sku_id,index)">
+                                    <i class="el-icon-delete"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
 
         </div>
 
@@ -50,7 +108,7 @@
         </div>
 
 
-        <el-button type="primary">下单并支付</el-button>
+        <el-button type="primary" @click="orderPay">下单并支付</el-button>
 
         <el-dialog title="收货地址" :visible.sync="dialogFormVisible" width="660px">
             <el-form :model="form">
@@ -80,6 +138,21 @@
                 dialogFormVisible: false,
                 formLabelWidth: '120px',
                 pay:''
+            }
+        },
+        mounted(){
+            console.log(this.$route.params.orderInfo);
+            this.orderInfo = this.$route.params.orderInfo;
+        },
+        methods: {
+            orderPay() {
+                this.axios.post('/orders')
+                .then(res=>{
+
+                })
+                .catch(err=>{
+
+                })
             }
         },
     }

@@ -16,7 +16,7 @@
                     <dd>我的回购单</dd>
                     <dd>我的回购单</dd>
                     <dt>个人中心</dt>
-                    <dd>地址管理</dd>
+                    <dd><router-link to="/usercenter/address">地址管理</router-link></dd>
                     <dd><router-link to="/usercenter/favorite">我的收藏</router-link></dd>
                     <dd>消息提醒</dd>
                     <dd>建议反馈</dd>

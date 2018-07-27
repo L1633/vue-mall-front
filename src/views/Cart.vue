@@ -15,6 +15,7 @@
                     <div class="cart-item">
                         <div class="cart-item-head">
                             <ul>
+                                
                                 <li>商品名称</li>
                                 <li>单价</li>
                                 <li>数量</li>
@@ -23,10 +24,10 @@
                             </ul>
                         </div>
                         <ul class="cart-item-list">
-                            <li v-for="(item,index) in cartList" :key="item.productName">
+                            <li v-for="(item,index) in cartList" :key="item.id">
                                 <div class="cart-tab-1">
                                     <div class="cart-item-check">
-                                        <a href="javascipt:;" class="checkbox-btn item-check-btn" :class="{'check':item.checked=='1'}" @click="editCart('checked',item)">
+                                        <a href="javascipt:;" class="checkbox-btn item-check-btn" v-bind:class="{'check':item.checked=='1'}" @click="editCart('checked',item,index)">
                                         <svg class="icon icon-ok">
                                             <use xlink:href="#icon-ok"></use>
                                         </svg>
@@ -70,9 +71,10 @@
                         </ul>
                     </div>
                 </div>
-                <div class="cart-foot-wrap">
+                <div class="cart-foot-wrap clearfix">
                     <div class="cart-foot-inner">
-                        <div class="cart-foot-l">
+
+                        <div class="cart-foot-l fl">
                             <div class="item-all-check">
                                 <a href="javascipt:;" @click="toggleCheckAll">
                                     <span class="checkbox-btn item-check-btn" v-bind:class="{'check':checkAllFlag}">
@@ -82,14 +84,19 @@
                                 </a>
                             </div>
                         </div>
+
                         <div class="cart-foot-r">
                             <div class="item-total">
+                                总价: <span class="total-price">{{totalPrice}}</span>
                                 <!-- Item total: <span class="total-price">{{totalPrice|currency('$')}}</span> -->
                             </div>
-                            <div class="btn-wrap">
+                            <div class="btn-wrap fr">
+                              <el-button type="primary">
                                 <a class="btn btn--red" v-bind:class="{'btn--dis':checkedCount==0}" @click="checkOut">去结算</a>
+                              </el-button> 
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -107,6 +114,7 @@
             return {
                 // cartList:[{"productImage":"1.jpg","salePrice":"129","productName":"小钢炮蓝牙音箱","productId":"201710017","_id":{"$oid":"58e7058498dab115d336b3fc"},"productNum":"5","checked":"0"}]
                 cartList:[],
+                cartIdCollection:[]
             }
         },
         components:{
@@ -130,7 +138,7 @@
             var money = 0;
             this.cartList.forEach((item)=>{
               if(item.checked=='1'){
-                money += parseFloat(item.productSku.product.price)*parseInt(iitem.amount);
+                money += parseFloat(item.productSku.product.price)*parseInt(item.amount);
               }
             })
             return money;
@@ -142,6 +150,10 @@
               .then(res=>{
                 console.log(res,'购物车')
                 this.cartList = res.data.list;
+                this.cartList.forEach(item=>{
+                  item.checked = '0';
+                })
+                console.log(this.cartList,'购物车2')
               })
               .catch(err=>{
 
@@ -153,7 +165,7 @@
             toggleSelection(){
 
             },
-            editCart(flag,item){
+            editCart(flag,item,index){
               if(flag=='add'){
                   item.amount++;
                 }else if(flag =='minu'){
@@ -162,7 +174,11 @@
                   }
                   item.amount--;
                 }else{
-                  item.checked = item.checked=="1"?'0':'1';
+                  // item.checked = item.checked == '1'? '0':'1';
+                  //替换数组
+                  const obj = this.cartList[index];
+                  obj.checked = obj.checked == '1'? '0':'1';
+                  this.$set(this.cartList,index,obj);
                 }
                 // this.axios.post("/users/cartEdit",{
                 //   productId:item.productId,
@@ -174,7 +190,7 @@
                 //       this.$store.commit("updateCartCount",flag=="add"?1:-1);
                 //     }
                 // })
-                 this.axios.put(`/cart/${item.id}`,{
+                this.axios.put(`/cart/${item.id}`,{
                   id:item.id,
                   amount:item.amount
                 }).then((res)=>{
@@ -201,7 +217,24 @@
             },
             // 结算    去创建订单
             checkOut(){
-                this.$router.push('/checkout');
+                this.cartList.forEach((item)=>{
+                  if(item.checked == '1'){
+                    this.cartIdCollection.push(item.id);
+                  }
+                })
+                this.axios.post('/cart/settle',{
+                  cartIdCollection:this.cartIdCollection
+                })
+                .then(res=>{
+                  console.log(res,'获取所选的商品');
+                  if(res.data.status_code == 0){
+                     this.$router.push({name:'checkout',params:{orderInfo:res.data.list}});
+                  }
+                })
+                .catch(err=>{
+
+                })
+               
             },
             delCartConfirm(id,index){
                 this.$confirm('您确定要删除该商品吗？', '提示', {

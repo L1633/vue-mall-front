@@ -10,6 +10,7 @@ import Favorite from '@/views/Favorite'
 import Cart from '@/views/Cart'
 import CheckOut from '@/views/CheckOut'
 import Product from '@/views/Product'
+import Address from '@/views/Address'
 
 Vue.use(Router)
 
@@ -48,6 +49,10 @@ const router = new Router({
         {
           path: 'favorite',
           component: Favorite,
+        },
+        {
+          path: 'address',
+          component: Address
         },
       ]
     },
