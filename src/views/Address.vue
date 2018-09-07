@@ -4,8 +4,7 @@
     <div class="title">新增收货地址</div>
     <el-form  :model="form" class="demo-form-inline" label-position="left" label-width="120px">
 
-      <el-row>
-                    
+      <el-row>    
           <el-col :span="9" >
               <el-form-item label="收货人姓名">
                   <el-input v-model="form.contact_name" placeholder="请输入经营者姓名"></el-input>
@@ -17,7 +16,6 @@
                   <el-input v-model="form.contact_phone" placeholder="请输入手机号"></el-input>
               </el-form-item>
           </el-col>
-
       </el-row>
 
       <el-form-item label="收货人地址" prop="desc">
@@ -69,28 +67,25 @@
     },
     methods: {
       handleItemChange(val){
-         console.log(val,'val',val[2])
-        //  var val = Array.from(val) ;
-        //  console.log(val,'val',val[2])
-         
-         this.form.province = val[0];
-         this.form.city = val[1];
-         this.form.district = val[2];
+        console.log(val,'val',val[2]);
+        this.form.province = val[0];
+        this.form.city = val[1];
+        this.form.district = val[2];
       },
       init() {
         this.axios.get('/addresses')
         .then(res=>{
-          console.log(res)
+          console.log(res);
           this.addressHas = res.data.list;
         })
         .catch(err=>{
-
+          console.log(err);
         })
       },
       add(){
         this.axios.post('/addresses',this.form)
         .then(res=>{
-          console.log(res)
+          console.log(res);
           if(res.data.status_code == 0){
              this.$message({
                 message: '添加成功',
@@ -101,26 +96,26 @@
           }
         })
         .catch(err=>{
-
+          console.log(err);
         })
       },
       changeAddr(){
         this.axios.put(`/addresses/${id}`)
         .then(res=>{
-          console.log(res)
+          console.log(res);
         })
         .catch(err=>{
-
+          console.log(err);
         })
       },
       deleteAddr(id,index){
         this.axios.delete(`/addresses/${id}`)
         .then(res=>{
-          console.log(res)
+          console.log(res);
           this.addressHas.splice(index,1)
         })
         .catch(err=>{
-
+          console.log(err);
         })
       }
     },

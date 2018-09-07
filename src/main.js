@@ -17,7 +17,7 @@ Vue.use(ElementUI);
 import axios from 'axios';
 Vue.prototype.axios = axios;
 
-axios.defaults.baseURL = 'http://192.168.1.120/api/'; //指定全局访问url   php服务器
+axios.defaults.baseURL = 'http://192.168.1.122/api/'; //指定全局访问url   php服务器
 
 // axios.defaults.baseURL = 'http://192.168.1.102:3000/'; //指定全局访问url node服务器
 

@@ -9,13 +9,15 @@
          <div class="info">
             <div class="title">收货人信息</div>
             <div class="addInfo" @click="dialogFormVisible = true">添加收货人</div>
+            <div v-for="item in addressHas" :key="item.id" >
+                {{item.contact_name}}{{item.address}}{{item.contact_phone}}
+            </div>
         </div>
 
         <div class="goodInfo">
             <div class="title">确认订单信息信息</div>
              <div class="cart-item-head">
                 <ul>
-                    
                     <li>商品名称</li>
                     <li>单价</li>
                     <li>数量</li>
@@ -46,17 +48,7 @@
                             <!-- <div class="item-price">{{item.salePrice|currency('$')}}</div> -->
                             <div class="item-price">{{item.productSku.product.price}}</div>
                         </div>
-                        <div class="cart-tab-3">
-                            <div class="item-quantity">
-                                <div class="select-self select-self-open">
-                                    <div class="select-self-area">
-                                        <a class="input-sub" @click="editCart('minu',item)">-</a>
-                                        <span class="select-ipt">{{item.amount}}</span>
-                                        <a class="input-add" @click="editCart('add',item)">+</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="cart-tab-4">
                             <!-- <div class="item-price-total">{{(item.productNum*item.salePrice)|currency('$')}}</div> -->
                             <div class="item-price-total">{{item.amount*item.productSku.product.price}}</div>
@@ -71,14 +63,13 @@
                     </li>
                 </ul>
 
-
         </div>
-
+        <!-- 使用优惠抵扣 -->
         <div class="count-actions">
             <div class="title">使用优惠抵扣</div>
             
         </div>
-
+        <!-- 选择支付方式 -->
         <div class="pay">
             <div class="title">选择支付方式</div>
             <ul class="clearfix">
@@ -133,25 +124,64 @@
             return {
                 form:{
                     name:'',
-                    region:''
+                    region:'',
                 },
                 dialogFormVisible: false,
                 formLabelWidth: '120px',
-                pay:''
+                pay:'',
+                orderInfo:'',
+                addressHas:[],  //已有地址
+                address_id:'',
+                items:[],
             }
         },
         mounted(){
-            console.log(this.$route.params.orderInfo);
+            this.init();
+            // console.log(this.$route.params.orderInfo);
             this.orderInfo = this.$route.params.orderInfo;
+            this.orderInfo.forEach(element => {
+                this.items.push({'sku_id':element.product_sku_id,'amount':element.amount})
+            });
+            console.log(this.items);
         },
         methods: {
-            orderPay() {
-                this.axios.post('/orders')
+            // 获取收货人地址
+            init() {
+                this.axios.get('/addresses')
                 .then(res=>{
-
+                    console.log(res);
+                    this.addressHas = res.data.list;
+                    this.address_id = res.data.list[0].id;
                 })
                 .catch(err=>{
-
+                    console.log(err);
+                })
+            },
+            orderPay() {
+                this.axios.post('/orders',{
+                    address_id:this.address_id,
+                    items:this.items,
+                })
+                .then(res=>{
+                    console.log(res)
+                    if(res.data.status_code ==0){
+                        let id = res.data.order.id;
+                        this.axios.get(`/payment/${id}/alipay`,{
+                            'id':id,
+                        })
+                        .then(res=>{
+                            const div = document.createElement('div');
+                            div.innerHTML = res.data;                          
+                            document.body.appendChild(div);
+                            document.forms.alipaysubmit.submit();
+                        })
+                        .catch(err=>{
+                            console.log(err);
+                        })
+                    }
+                })
+                .catch(err=>{
+                    console.log(err);
                 })
             }
         },
