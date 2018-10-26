@@ -5,8 +5,6 @@
         </div>
         <div class="register-main clearfix">
 
-            
-
             <div class="register-form fr">
 
                 <el-form ref="form" :model="form">

@@ -4,7 +4,7 @@
         <el-card :body-style="{ padding: '10px' }" v-for="(item,index) in favoriteArr" :key="item.id" class="product-card-item fl" shadow="hover">
             <i class="el-icon-delete" @click="deleteFav(item.id,index)"></i>
             <div class="card-img">
-                    <img :src="item.image" class="image">
+                <img :src="item.image" class="image">
             </div>
             <div style="padding: 14px;">
                     <p>{{item.title}}</p>
@@ -69,7 +69,6 @@
                 display: block;
             }
         }
-        
     }
   
 </style>

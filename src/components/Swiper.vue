@@ -67,7 +67,7 @@
         },
         computed: {
             swiper() {
-            return this.$refs.mySwiper.swiper
+                return this.$refs.mySwiper.swiper
             }
         },
         methods:{
